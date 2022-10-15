@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import { View, Text } from 'react-native';
+import Appbar from './components/Appbar';
+import CartView from './components/CartView';
+import Container from './components/Container';
+import FlexBox from './components/FlexBox';
+import ItemsList from './components/ItemsList';
+import ItemView from './components/ItemView';
+import ListView from './components/ListView';
+import Popup from './components/Popup';
+import Starting from './components/Starting';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+        {/* <Appbar />
+        <CartView /> */}
+        <Popup />
     </View>
+
+
+
+
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
