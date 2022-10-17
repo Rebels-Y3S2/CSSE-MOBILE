@@ -7,7 +7,7 @@ export default function ItemView() {
     return (
         <View>
             <Container>
-                <ImageBackground source={image} imageStyle={{ borderTopLeftRadius: 6, borderTopRightRadius: 6 }} resizeMode="cover" style={styles.itemContainer} />
+                {/* <ImageBackground source={image} imageStyle={{ borderTopLeftRadius: 6, borderTopRightRadius: 6 }} resizeMode="cover" style={styles.itemContainer} /> */}
                 <View style={{ padding: 5 }}>
                     <Text style={styles.itemName}>
                         Constrction site Hammar

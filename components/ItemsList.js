@@ -37,16 +37,6 @@ export default function ItemsList() {
       style={{}}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => console.log(item)}>
-          {/* <ImageBackground imageStyle={{ borderRadius: 6}} source={image} resizeMode="cover" style={styles.itemContainer}>
-            <LinearGradient
-              colors={['#00000000', '#000000']}
-              style={{ height: '40%', width: '100%', borderBottomWidth: 1, borderBottomColor: '#FFFFFF', borderRadius: 5}}>
-              <View style={styles.itemTextContainer}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemCode}>{item.code}</Text>
-              </View>
-            </LinearGradient>
-          </ImageBackground> */}
           <ItemView />
         </TouchableOpacity>
       )}
