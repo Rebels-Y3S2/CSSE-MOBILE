@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { getItemsApi } from "../../api/itemsApi";
 import AddtoCartDialog from "../../components/addToCart/AddtoCartDialog";
-import ListItems2 from "../../components/ListItems2";
+import ItemsListView from "../../components/itemsListView/ItemsLIstView";
 
 export default function ListItemsScreen() {
     const [items, setItems] = useState([]);
@@ -25,17 +25,15 @@ export default function ListItemsScreen() {
 
     return (
         <View>
-            <ListItems2
+            <ItemsListView
                 items={items}
                 onItemPress={handleOnItemPress}
             />
-            <AddtoCartDialog 
+            <AddtoCartDialog
                 visible={dialogOpen}
                 title={selectedItem?.name}
                 onAddToCart={handleAddtoCart}
             />
-
         </View>
-
     );
 }
