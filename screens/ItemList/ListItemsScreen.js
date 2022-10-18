@@ -29,12 +29,11 @@ export default function ListItemsScreen() {
                 items={items}
                 onItemPress={handleOnItemPress}
             />
-
-            {dialogOpen && <AddtoCartDialog 
+            <AddtoCartDialog 
                 visible={dialogOpen}
                 title={selectedItem?.name}
                 onAddToCart={handleAddtoCart}
-            />}
+            />
 
         </View>
 
