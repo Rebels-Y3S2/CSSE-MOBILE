@@ -8,9 +8,8 @@ import ItemsList from './components/ItemsList';
 import ItemView from './components/ItemView';
 import ListItems2 from './components/ListItems2';
 import ListView from './components/ListView';
-import Popup from './components/Popup';
 import Starting from './components/Starting';
-import ListItemsScreen from './screens/ListItemsScreen';
+import ListItemsScreen from './screens/ItemList/ListItemsScreen';
 
 export default function App() {
   return (
