@@ -1,7 +1,7 @@
-import { Surface } from "@react-native-material/core";
-import { StyleSheet } from "react-native"
-export default function Container({children, }) {
-    return (
+import { Surface } from '@react-native-material/core'
+import { StyleSheet } from 'react-native'
+export default function Container ({ children }) {
+  return (
         <Surface
             elevation={2}
             category="medium"
@@ -9,11 +9,11 @@ export default function Container({children, }) {
         >
             {children}
         </Surface>
-    )
+  )
 }
 
 const styles = StyleSheet.create({
-    containerStyles: {
+  containerStyles: {
 
-    }
-});
+  }
+})

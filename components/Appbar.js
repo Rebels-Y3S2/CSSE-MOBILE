@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   AppBar,
   IconButton,
   Button,
-  Avatar,
-} from "@react-native-material/core";
+  Avatar
+} from '@react-native-material/core'
 
-function Appbar() {
-    const [loggedIn, setLoggedIn] = useState(false);
-    return (
+function Appbar () {
+  const [loggedIn, setLoggedIn] = useState(false)
+  return (
       <AppBar
-        style={{backgroundColor: '#002951', marginTop: 30}}
+        style={{ backgroundColor: '#002951', marginTop: 30 }}
         title="Title"
         trailing={props =>
-          loggedIn ? (
+          loggedIn
+            ? (
             <IconButton
               icon={<Avatar label="Yaman KATBY" size={28} />}
               onPress={() => setLoggedIn(!loggedIn)}
               {...props}
             />
-          ) : (
+              )
+            : (
             <Button
               variant="text"
               title="Login"
@@ -28,13 +30,10 @@ function Appbar() {
               onPress={() => setLoggedIn(!loggedIn)}
               {...props}
             />
-          )
+              )
         }
       />
-    );
-} 
+  )
+}
 
-export default Appbar;
-
-
-
+export default Appbar

@@ -1,17 +1,16 @@
+import { View, ScrollView } from 'react-native'
+import Appbar from './components/Appbar'
+import ListItemsScreen from './screens/ItemList/ListItemsScreen'
+import { ToastProvider } from 'react-native-toast-notifications'
 
-import { View, Text } from 'react-native';
-import Appbar from './components/Appbar';
-import ListItemsScreen from './screens/ItemList/ListItemsScreen';
-
-export default function App() {
+export default function App () {
   return (
-    <View>
+    <ToastProvider>
+      <ScrollView>
         <Appbar />
         <ListItemsScreen />
-    </View>
+      </ScrollView>
+    </ToastProvider>
 
-
-
-
-  );
+  )
 }
