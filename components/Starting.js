@@ -1,23 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react'
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 
-export default function Starting() {
-    const [goal, setGoal] = useState("");
-    const [goals, setGoals] = useState([]);
+export default function Starting () {
+  const [goal, setGoal] = useState('')
+  const [goals, setGoals] = useState([])
 
-    function hanldeTextInput(val) {
-        console.log(val);
-        setGoal(val)
-    }
+  function hanldeTextInput (val) {
+    console.log(val)
+    setGoal(val)
+  }
 
-    function handleOnPress() {
-        setGoals([...goals, goal]);
-        setGoal('');
-    }
+  function handleOnPress () {
+    setGoals([...goals, goal])
+    setGoal('')
+  }
 
   return (
-    <View style={styles.container}> 
+    <View style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput style={styles.textInput} placeholder='Enter your goals' onChangeText={hanldeTextInput} />
         <Button title="Add Goal" onPress={handleOnPress} />
@@ -26,7 +25,7 @@ export default function Starting() {
         <Text>List of goals</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     borderBottomWidth: 1,
-    borderColor: '#CCCCCC' 
+    borderColor: '#CCCCCC'
   },
   goalsContainer: {
     flex: 4
@@ -53,4 +52,4 @@ const styles = StyleSheet.create({
     width: '65 %',
     padding: 8
   }
-});
+})
