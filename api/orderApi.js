@@ -1,8 +1,9 @@
 import axios from 'axios'
+import { BASE_URL } from '../utils/constants'
 
-export const getItems = () => {
+export const addOrder = (payload) => {
   return axios
-    .get('https://csse-be.herokuapp.com/api/items')
+    .post(BASE_URL + '/orders/addToCart', payload)
     .then((response) => {
       return response
     })
@@ -11,9 +12,31 @@ export const getItems = () => {
     })
 }
 
-export const addOrder = (payload) => {
+export const getOrders = () => {
   return axios
-    .post('https://csse-be.herokuapp.com/api/orders/addToCart', payload)
+    .get(BASE_URL + '/orders')
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      return error
+    })
+}
+
+export const getOrderByOrderId = (id) => {
+  return axios
+    .get(BASE_URL + `/orders/${id}`)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      return error
+    })
+}
+
+export const removeorder = (id) => {
+  return axios
+    .delete(BASE_URL + `/orders/${id}`)
     .then((response) => {
       return response
     })

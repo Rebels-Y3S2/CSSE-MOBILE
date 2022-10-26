@@ -1,17 +1,33 @@
 import React from 'react'
-import { FlatList, TouchableOpacity, View } from 'react-native'
+import { FlatList, TouchableOpacity, View, StyleSheet } from 'react-native'
 import ItemView from '../itemView/ItemView'
 
-export default function ItemsListView ({ items, onItemPress }) {
+export default function ItemsListView ({ items, onItemPress, orders }) {
+
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
-        data={items}
+        data={orders}
         renderItem={({ item }) =>
-        <TouchableOpacity onPress={() => onItemPress(item)}>
+        <TouchableOpacity onPress={() => onItemPress(item)} style={styles.listItem}>
           <ItemView item={item} />
         </TouchableOpacity>}
+        extraData={orders}
+        inverted= {-1}
       />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    backgroundColor: "#002951"
+  },
+  listItem: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#002951",
+    padding: 10,
+  },
+});

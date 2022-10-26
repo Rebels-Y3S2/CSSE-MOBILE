@@ -1,22 +1,32 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { getItems } from '../../api/itemsApi'
-import AddtoCartDialog from '../../components/addToCart/AddtoCartDialog'
-import ItemsListView from '../../components/itemsListView/ItemsLIstView'
-import * as constants from '../../utils/constants.js'
+import {
+  getUserId,
+  ORDER_NOW,
+  PLACE_ORDER,
+  PROCUMENT_USER,
+  QTY,
+  SEARCH_ITEM,
+  SEARCH_QTY,
+  SELECT_ITEM,
+  SELECT_QUANTITY,
+  TOTAL_ITEMS,
+  UNIT_PRICE
+} from "../../utils/constants";
 import { Dropdown } from 'react-native-element-dropdown'
-import { HStack, VStack, Box, Divider, Stack, Button } from '@react-native-material/core'
+import { HStack, VStack, Button } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { qty } from '../../utils/qty'
 import { Card, ListItem, Avatar } from '@rneui/themed'
 import styles from './styles'
 import { addOrder } from '../../api/orderApi'
 import { useToast } from 'react-native-toast-notifications'
+import shortid from 'shortid';
 
-export default function ListItemsScreen () {
+export default function PlaceOrderScreen () {
   const toast = useToast()
   const [items, setItems] = useState([])
-  const itemList = { itemId: '001', qty: 6 }
   const [list, setList] = useState([])
 
   const [selectedItem, setSelectedItem] = useState(null)
@@ -29,10 +39,8 @@ export default function ListItemsScreen () {
 
   const [itemFormData, setItemFormData] = useState([])
   const [formData, setFormData] = useState([])
-  const [formDataList, setFormDataList] = useState([])
 
   useEffect(() => {
-    // setItems(getItemsApi().Item);
     getItems().then((data) => {
       setItems(data.data?.Item)
     })
@@ -76,12 +84,15 @@ export default function ListItemsScreen () {
     orderObj = {
       orderItems: formData,
       totalAmount: total.reduce((a, v) => a = a + v, 0),
-      orderStatus: 1
+      orderStatus: 1,
+      referenceNo: 'ORD' + shortid.generate(),
     }
 
     await addOrder(orderObj).then((res) => {
       if (res?.data?.isSuccess) {
         toast.show('Order Created Successfully!', { type: 'success', placement: 'bottom', duration: 4000, animationType: 'zoom-in', topOffset: 30,bottomOffset: 40 })
+        setFormData([]);
+        setList([]);
       } else {
         toast.show('Error on creating the order!', { type: 'warning', placement: 'bottom', duration: 4000, animationType: 'zoom-in', topOffset: 30, bottomOffset: 40 })
       }
@@ -95,7 +106,7 @@ export default function ListItemsScreen () {
     if (selectedQty || isFocusQty) {
       return (
           <Text style={[styles.label, isFocusQty && { color: 'blue' }]}>
-            Select Qty
+            {SELECT_QUANTITY}
           </Text>
       )
     }
@@ -113,8 +124,8 @@ export default function ListItemsScreen () {
       <ScrollView>
         <View>
           <View>
-            <Card>
-              <Card.Title>Order Now</Card.Title>
+            <Card style={styles.orderNowCard}>
+              <Card.Title>{ORDER_NOW}</Card.Title>
               <Card.Divider />
                 <VStack m={4} spacing={6}>
                   <View style={styles.container}>
@@ -130,8 +141,8 @@ export default function ListItemsScreen () {
                         maxHeight={300}
                         labelField={'label'}
                         valueField="_id"
-                        placeholder={!isFocus ? 'Select Item' : '...'}
-                        searchPlaceholder="Search Items"
+                        placeholder={!isFocus ? SELECT_ITEM : '...'}
+                        searchPlaceholder={SEARCH_ITEM}
                         value={selectedItem}
                         onFocus={() => {
                           setIsFocus(true)
@@ -142,7 +153,7 @@ export default function ListItemsScreen () {
                         onChange={item => {
                           setSelectedItem(item._id)
                           setItemData({ itemId: item._id, itemName: item.itemName, stock: item.stock, unitPrice: item.unitPrice })
-                          setItemFormData({ itemId: item._id, supplierDetails: '634ea905f0c2bea76c657643' })
+                          setItemFormData({ itemId: item._id, supplierDetails: getUserId(PROCUMENT_USER) })
                           setIsFocus(false)
                         }}
                       />
@@ -161,8 +172,8 @@ export default function ListItemsScreen () {
                           maxHeight={300}
                           labelField={'key'}
                           valueField="value"
-                          placeholder={!isFocusQty ? 'Select Quantity' : '...'}
-                          searchPlaceholder="Search Qty"
+                          placeholder={!isFocusQty ? SELECT_QUANTITY : '...'}
+                          searchPlaceholder={SEARCH_QTY}
                           value={selectedQty}
                           onFocus={() => {
                             setIsFocusQty(true)
@@ -180,6 +191,7 @@ export default function ListItemsScreen () {
                     <View>
                       <Button
                         style={styles.plusBtn}
+                        color="#002951"
                         variant="contained"
                         disabled={!selectedQty}
                         onPress={() => handleAdd()}
@@ -189,6 +201,7 @@ export default function ListItemsScreen () {
                     <View>
                       <Button
                         style={styles.minusBtn}
+                        color="red"
                         variant="contained"
                         disabled={list.length === '0'}
                         onPress={() => handleRemove()}
@@ -199,7 +212,6 @@ export default function ListItemsScreen () {
               </VStack>
             </Card>
           </View>
-
           <View>
           <Card>
               <Card.Title>Order Details</Card.Title>
@@ -207,11 +219,11 @@ export default function ListItemsScreen () {
               {
                 list.map((l, i) => (
                   <ListItem key={i} bottomDivider>
-                    <Avatar source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1710/1710412.png' }} />
+                    <Avatar source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6052/6052663.png' }} />
                     <ListItem.Content>
                       <ListItem.Title style={styles.cardName}>{l.itemName}</ListItem.Title>
-                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>Unit Price &nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l.unitPrice}/-</ListItem.Subtitle>
-                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>QTY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> {l.quantity}</ListItem.Subtitle>
+                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>{UNIT_PRICE} &nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l.unitPrice}/-</ListItem.Subtitle>
+                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>{QTY} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> {l.quantity}</ListItem.Subtitle>
                       <ListItem.Subtitle><Text style={styles.cardSubtitle}>Total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{(Number(l.unitPrice) * Number(l.quantity))}/-</ListItem.Subtitle>
                     </ListItem.Content>
                   </ListItem>
@@ -220,15 +232,22 @@ export default function ListItemsScreen () {
           </Card>
           </View>
         </View>
-
         <View>
           <Card>
-            <Card.Title>Place Order</Card.Title>
+            <Card.Title>{PLACE_ORDER}</Card.Title>
             <Card.Divider />
-            <Text style={styles.cardSubtitle}>Total Items : {list.length}</Text>
-            {totalAgreed()}
-            {/* <Text style={styles.cardSubtitle}>Total Price : {formData.filter((d) => d.agreedPrice)}</Text> */}
-            <Button style={styles.minusBtn} variant="contained" disabled={list.length === 0} onPress={() => handleSubmit()} title={'Place Order'}/>
+            <HStack m={6} spacing={90} style={{marginBottom: 20}}>
+              <Text style={styles.cardSubtitle}>{TOTAL_ITEMS} : {list.length}</Text>
+              {totalAgreed()}
+            </HStack>
+            <Button
+              style={styles.placeOrdBtn}
+              color="#002951"
+              variant="contained"
+              disabled={list.length === 0}
+              onPress={() => handleSubmit()}
+              title={PLACE_ORDER}
+            />
           </Card>
         </View>
         </ScrollView>

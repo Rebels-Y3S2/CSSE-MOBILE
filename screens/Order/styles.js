@@ -47,10 +47,10 @@ export default styles = StyleSheet.create({
     fontSize: 16
   },
   plusBtn: {
-    backgroundColor: 'green'
+    // border: '1px solid #002951'
   },
   minusBtn: {
-    backgroundColor: 'red'
+    // backgroundColor: 'red'
   },
   cardHeader: {
     backgroundColor: '#002951',
@@ -64,5 +64,10 @@ export default styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18,
     textTransform: 'uppercase'
+  },
+  orderNowCard: {
+    border: '1px solid #002951'
+  },
+  placeOrdBtn: {
   }
 })
