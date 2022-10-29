@@ -1,9 +1,9 @@
-import { Button } from '@react-native-material/core';
-import { Text, View, StyleSheet } from 'react-native';
-import { DataTable } from 'react-native-paper';
-import Dialog, { SlideAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
+import { Button } from '@react-native-material/core'
+import { Text, View, StyleSheet } from 'react-native'
+import { DataTable } from 'react-native-paper'
+import Dialog, { SlideAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog'
 
-export default function CartView() {
+export default function CartView () {
   return (
 
       <View style={styles.container}>
@@ -38,8 +38,8 @@ export default function CartView() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      paddingTop: 100,
-      paddingHorizontal: 30,
-    },
-  });
+  container: {
+    paddingTop: 100,
+    paddingHorizontal: 30
+  }
+})
