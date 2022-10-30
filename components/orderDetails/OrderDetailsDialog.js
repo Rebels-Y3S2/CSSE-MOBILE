@@ -8,7 +8,7 @@ import styles from './styles';
 import moment from 'moment'
 import { Card, ListItem, Avatar } from '@rneui/themed'
 
-export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart, selectedItem }) {
+export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart, selectedItem, selectedOderData }) {
   const [amount, setAmount] = useState(1)
   
   useEffect(() => {
@@ -58,7 +58,10 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart
           <Card>
             <Card.Title>Ordered Date & Time</Card.Title>
             <Card.Divider />
-            <Text>{moment(selectedItem?.createdAt).format('lll')}</Text>
+            {/* <Text>{moment(selectedItem?.createdAt).format('lll')}</Text> */}
+            <Text>{selectedItem?.order.map((e) => (
+              <Text>{e.item.itemName}</Text>
+            ))}</Text>
           </Card>
         </View>
       </DialogContent>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { getItemsApi } from "../../api/itemsApi";
 import { getOrders, getOrderByOrderId, removeorder } from "../../api/orderApi";
 import ItemsListView from "../../components/itemsListView/ItemsLIstView";
 import OrderDetailsDialog from "../../components/orderDetails/OrderDetailsDialog";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function OrderList () {
+export default function OrderList ({navigation}) {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -19,7 +20,6 @@ export default function OrderList () {
   useEffect(() => {
     getOrders().then((data) => {
       setOrders(data?.data?.Order_Items)
-      // console.log(data?.data?.Order_Items)
     })
   }, [orders])
 
@@ -46,8 +46,16 @@ export default function OrderList () {
       setDialogOpen(true);
   }
 
+  const handleLogout = () => {
+    AsyncStorage.clear();
+    navigation.navigate('Login');
+  };
+
   return (
       <View>
+        <TouchableOpacity  onPress={handleLogout}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
           <ItemsListView
               items={items}
               orders={orders}
