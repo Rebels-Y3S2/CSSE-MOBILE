@@ -12,16 +12,21 @@ export default function OrderList ({navigation}) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [orders, setOrders] = useState([]);
   const [selectedOderData, setSelectedOrderData] = useState([])
+  const [updated, setUpdated] = useState(false)
 
   useEffect(() => {
       setItems(getItemsApi());
   }, []);
 
   useEffect(() => {
+    getAllOrders();
+  }, [orders])
+
+  const getAllOrders = () => {
     getOrders().then((data) => {
       setOrders(data?.data?.responseData)
     })
-  }, [orders])
+  }
 
   useEffect(() => {
     if(selectedItem) {
@@ -35,16 +40,23 @@ export default function OrderList ({navigation}) {
   function handleRemoveOrder() {
       if(selectedItem) {
         removeorder(selectedItem?._id).then((data) => {
-          // setSelectedOrderData(data.request._response);
+          getAllOrders()
         })
       }
       setDialogOpen(false);
+      setUpdated(true);
   }
 
   function handleOnItemPress(item) {
       setSelectedItem(item);
       setDialogOpen(true);
   }
+
+  useEffect(() => {
+    if (!dialogOpen) {
+      setUpdated(false);
+    }
+  }, [dialogOpen])
 
   const handleLogout = () => {
     AsyncStorage.clear();
@@ -65,6 +77,8 @@ export default function OrderList ({navigation}) {
               onDelete={handleRemoveOrder}
               setDialogOpen={setDialogOpen}
               selectedOderData={JSON.stringify(selectedOderData)}
+              handleGetOrders={getAllOrders}
+              setSelectedItem={setSelectedItem}
           />
       </View>
   );

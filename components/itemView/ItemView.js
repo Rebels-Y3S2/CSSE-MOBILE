@@ -29,7 +29,7 @@ export default function ItemView(props) {
                 Total - {getPriceInRupees(item?.totalAmount)}
             </Text>
             <Text style={styles.itemDetails}>
-                Total - {moment(item?.createdAt).format('lll')}
+                Ordered At - {moment(item?.createdAt).format('lll')}
             </Text>
         </View>
     )

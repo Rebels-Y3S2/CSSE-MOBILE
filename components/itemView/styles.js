@@ -11,9 +11,9 @@ export default styles = StyleSheet.create({
     itemName: {
         fontSize: 15,
         marginBottom: 5,
-        fontWeight: '600',
+        fontWeight: '800',
         marginTop: 20,
-        color: 'red'
+        color: '#002951'
     },
     itemDetails: {
         fontWeight: '600',

@@ -3,6 +3,7 @@ import {
   AppBar,
   IconButton,
   Button,
+  HStack,
 } from '@react-native-material/core'
 import { Avatar } from '@rneui/themed'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,17 +38,19 @@ function Appbar ({navigation}) {
         trailing={props =>
           loggedIn
             ? (
-            <IconButton
-              icon={
-                <Avatar
-                  source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
-                  size={35}
-                  rounded
+              <HStack spacing={10}>
+                <IconButton
+                  icon={
+                    <Avatar
+                      source={{ uri: 'https://randomuser.me/api/portraits/women/57.jpg' }}
+                      size={35}
+                      rounded
+                    />
+                  }
+                  onPress={() => handleLogout()}
+                  {...props}
                 />
-              }
-              onPress={handleLogout}
-              {...props}
-            />
+              </HStack>
               )
             : (
             <Button

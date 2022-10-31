@@ -15,11 +15,20 @@ import { getUserId } from '../../utils/constants'
 import { Divider, Switch } from "@react-native-material/core";
 
 export default function OrderEditScreen (props) {
-  const {orderData, modifiedMappedOrderData, setDialogOpen} = props;
+  const {orderData, modifiedMappedOrderData, setDialogOpen, dialogOpen, handleGetOrders, setModifiedMappedData} = props;
 // console.log(modifiedMappedOrderData)
   const toast = useToast()
   const [items, setItems] = useState([])
-  const [list, setList] = useState(orderData.orderItems)
+  const [list, setList] = useState(orderData?.orderItems)
+
+  const sData = (orderData?.orderItems.map((d) => {
+    return {
+      agreedPrice: d?.agreedPrice,
+      item: d?.item?._id,
+      quantity: d?.quantity,
+      supplierDetails: d?.supplierDetails,
+    }
+  }));
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [selectedItemData, setItemData] = useState({})
@@ -30,11 +39,16 @@ export default function OrderEditScreen (props) {
   const [isFocusQty, setIsFocusQty] = useState(false)
 
   const [itemFormData, setItemFormData] = useState([])
-  const [formData, setFormData] = useState(modifiedMappedOrderData)
+  const [formData, setFormData] = useState(sData)
 
-  const [checked, setChecked] = useState(orderData.orderStatus === 6? true : false);
+  const [checked, setChecked] = useState(orderData?.orderStatus === 6? true : false);
   const [toggled, setToggled] = useState(false);
+  const [total, setTotal] = useState(0);
 
+  // useEffect(() => {
+  //   setFormData(modifiedMappedOrderData)
+  // });
+  
   useEffect(() => {
     getItems().then((data) => {
       setItems(data.data?.responseData)
@@ -42,7 +56,7 @@ export default function OrderEditScreen (props) {
     .catch((e) => {
       console.log(e)
     })
-  }, [])
+  })
 
   const handleAdd = () => {
     const items = list
@@ -50,6 +64,7 @@ export default function OrderEditScreen (props) {
     const totalPrice = { agreedPrice: Number(selectedQtyData.quantity) * Number(selectedItemData.unitPrice) }
     setList([...items, { ...selectedItemData, ...selectedQtyData, ...totalPrice }])
     setFormData([...data, { ...itemFormData, ...selectedQtyData, ...totalPrice }])
+    console.log(formData)
     // console.log(list)
     setSelectedItem()
     setSelectedQty()
@@ -78,26 +93,34 @@ export default function OrderEditScreen (props) {
     return null
   }
 
+  useEffect(() => {
+    const ta = formData?.map((d) => Number(d?.agreedPrice));
+    setTotal(ta?.reduce((a, v) => a = a + v, 0))
+  }, [dialogOpen, formData]);
+
   const handleSubmit =  (orderObj) => {
-    const total = formData?.map((d) => Number(d.agreedPrice))
-    const tt = total?.reduce((a, v) => a = a + v, 0)
+    // const da = [...modifiedMappedOrderData, ...formData];
     orderObj = {
       orderItems: formData,
-      totalAmount: tt,
-      orderStatus: tt >= 100000? 1 : 0,
+      totalAmount: total,
+      orderStatus: total >= 100000 ? 1 : 0,
     }
     editOrder(orderData._id, orderObj).then((res) => {
       if (res?.data?.isSuccessful) {
         alert(res?.data?.message)
-        setDialogOpen(false)
       } else {
         alert(res?.data?.message)
-        setDialogOpen(false)
       }
+      setDialogOpen(false)
+      setFormData([])
+      handleGetOrders()
     })
     .catch((e) => {
       console.log(e)
       alert(e)
+      setDialogOpen(false)
+      setFormData([])
+      handleGetOrders()
     })
   }
 
@@ -113,9 +136,9 @@ export default function OrderEditScreen (props) {
   }
 
   const totalAgreed = () => {
-    const total = formData?.map((d) => Number(d.agreedPrice))
+    // const da = [...modifiedMappedOrderData, ...formData];
     return (
-      <Text style={styles.cardSubtitle}>Total Price : Rs.{total?.reduce((a, v) => a = a + v, 0)}/-</Text>
+      <Text style={styles.cardSubtitle}>Total Price : Rs.{total}/-</Text>
     )
   }
 
@@ -223,7 +246,7 @@ export default function OrderEditScreen (props) {
                         style={styles.minusBtn}
                         color="red"
                         variant="contained"
-                        disabled={list.length === '0'}
+                        disabled={list?.length === '0'}
                         onPress={() => handleRemove()}
                         trailing={props => <Icon name="minus" {...props} size={25} style={{ marginLeft: -10 }} />}
                       />
@@ -234,7 +257,7 @@ export default function OrderEditScreen (props) {
           </View>
           <Text style={styles.itemName}>Added Items</Text>
           <View style={styles.itemContainer}>
-              {list.map((l, i) => (
+              {list?.map((l, i) => (
                   <ListItem key={i} bottomDivider>
                     <Avatar source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6052/6052663.png' }} />
                     <ListItem.Content>
@@ -253,14 +276,14 @@ export default function OrderEditScreen (props) {
             <Card.Title>{"Save Order"}</Card.Title>
             <Card.Divider />
             <VStack m={6} spacing={10} style={{marginBottom: 20}}>
-              <Text style={styles.cardSubtitle}>{constants.TOTAL_ITEMS} : {list.length}</Text>
+              <Text style={styles.cardSubtitle}>{constants.TOTAL_ITEMS} : {list?.length}</Text>
               {totalAgreed()}
             </VStack>
             <Button
               style={styles.placeOrdBtn}
               color="#002951"
               variant="contained"
-              disabled={list.length === 0}
+              disabled={list?.length === 0}
               onPress={() => handleSubmit()}
               title={"Save Order"}
             />
