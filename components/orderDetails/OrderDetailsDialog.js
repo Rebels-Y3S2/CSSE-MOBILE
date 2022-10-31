@@ -1,20 +1,36 @@
 import { Button } from '@react-native-material/core';
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import Dialog, { SlideAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
 import { getPriceInRupees } from '../../utils/common.js';
 import * as constants from '../../utils/constants.js';
 import styles from './styles';
 import moment from 'moment'
 import { Card, ListItem, Avatar } from '@rneui/themed'
+import { Status } from '../../utils/status.js';
+import OrderEditScreen from '../itemView/OrderEditScreen.js';
 
 export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart, selectedItem, selectedOderData }) {
   const [amount, setAmount] = useState(1)
+  const [modifiedMappedData, setModifiedMappedData] = useState([])
   
   useEffect(() => {
     setAmount(1);
   }, [visible]);
-
+  
+  
+  useEffect(() => {
+    setModifiedMappedData(selectedItem?.orderItems.map((d) => {
+      return {
+        agreedPrice: d?.agreedPrice,
+        item: d?.item?._id,
+        quantity: d?.quantity,
+        supplierDetails: d?.supplierDetails,
+      }
+      
+    }))
+  }, [selectedItem])
+  
   return (
     <Dialog
       visible={visible}
@@ -34,36 +50,25 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart
       }
     >
       <DialogContent style={styles.dialogCont}>
-        <View>
-          <Card>
-            <Card.Title>Ref No.</Card.Title>
-            <Card.Divider />
-            <Text>{selectedItem?.referenceNo}</Text>
-          </Card>
-          <Card>
-            <Card.Title>Status.</Card.Title>
-            <Card.Divider />
-            <Text>{selectedItem?.isAccepted === 0? constants.NOT_ACCEPTED : constants.ACCEPTED}
-            {selectedItem?.isAccepted === 0?
-                    <Text style={{fontSize: 35, color: 'red', textAlign: 'right'}}>&#8226;</Text> :
-                    <Text style={{fontSize: 35, color: '#3fc18c', textAlign: 'right'}}>&#8226;</Text>
-                }
+        <ScrollView style={{height: 600}}>
+          <View style={styles.itemContainer}>
+            <Text style={styles.itemDetails}>
+              Ref No. - {selectedItem?.referenceNo}
             </Text>
-          </Card>
-          <Card>
-            <Card.Title>Total Amount</Card.Title>
-            <Card.Divider />
-            <Text>{getPriceInRupees(selectedItem?.totalAmount)}</Text>
-          </Card>
-          <Card>
-            <Card.Title>Ordered Date & Time</Card.Title>
-            <Card.Divider />
-            {/* <Text>{moment(selectedItem?.createdAt).format('lll')}</Text> */}
-            <Text>{selectedItem?.order.map((e) => (
-              <Text>{e.item.itemName}</Text>
-            ))}</Text>
-          </Card>
-        </View>
+            <Text style={styles.itemDetails}>
+              Status - {Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText? Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText : "-"}
+              </Text>
+              <Text style={styles.itemDetails}>
+                Ordered Date - {moment(selectedItem?.createdAt).format('lll')}
+              </Text>
+              <Text style={styles.itemDetails}>
+                Total Amount - {getPriceInRupees(selectedItem?.totalAmount)}
+              </Text>
+          </View>
+          <View>
+            <OrderEditScreen orderData={selectedItem} modifiedMappedOrderData={modifiedMappedData}/>
+          </View>
+        </ScrollView>
       </DialogContent>
     </Dialog>
   )

@@ -13,7 +13,7 @@ export default function ItemView(props) {
                 Ref No. - {item.referenceNo}
             </Text>
             <Text style={styles.itemDetails}>
-                {/* {getPriceInRupees(item.totalAmount)} */}
+                {getPriceInRupees(item.totalAmount)}
                 Status - {item.isAccepted === 0? NOT_ACCEPTED : ACCEPTED}
                 {item.isAccepted === 0?
                     <Text style={{fontSize: 35, color: 'red', textAlign: 'right'}}>&#8226;</Text> :

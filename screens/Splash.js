@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import { Logo } from '../assets';
 
 export default function Splash({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       handleGetToken();
-    }, 2000);
+    }, 4000);
   });
 
   const handleGetToken = async () => {
@@ -20,7 +21,7 @@ export default function Splash({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Splash</Text>
+      <Image source={Logo} />
     </View>
   );
 }
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#002951',
   },
   text: {
     fontWeight: '800',

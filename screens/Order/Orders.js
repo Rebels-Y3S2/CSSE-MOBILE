@@ -19,15 +19,15 @@ export default function OrderList ({navigation}) {
 
   useEffect(() => {
     getOrders().then((data) => {
-      setOrders(data?.data?.Order_Items)
+      setOrders(data?.data?.responseData)
     })
-  }, [orders])
+  }, [])
 
   useEffect(() => {
     if(selectedItem) {
       getOrderByOrderId(selectedItem?._id).then((data) => {
         // setSelectedOrderData(data.request._response);
-        setSelectedOrderData(data?.data?.Order_Items);
+        setSelectedOrderData(data?.data?.responseData);
       })
     }
   }, [selectedItem])
@@ -53,9 +53,6 @@ export default function OrderList ({navigation}) {
 
   return (
       <View>
-        <TouchableOpacity  onPress={handleLogout}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
           <ItemsListView
               items={items}
               orders={orders}

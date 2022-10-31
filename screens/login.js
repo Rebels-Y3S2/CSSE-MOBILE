@@ -75,11 +75,10 @@ export default function Login({navigation}) {
         try {
             const userLog = loginUser(userObj);
             const { data: res } = await userLog;
-            AsyncStorage.setItem('AccessToken', res?.data);
-            AsyncStorage.setItem('UserId', res?.userData._id);
-            AsyncStorage.setItem('Image', res?.userData.imageUrl);
-            if(res.data) {
+            AsyncStorage.setItem('AccessToken', res?.responseData);
+            if(res.isSuccessful) {
                 navigation.replace('TabNavigator');
+                alert(res.message)
             }
             // console.log(res?.userData.imageUrl)
         } catch (error) {
@@ -87,6 +86,7 @@ export default function Login({navigation}) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 console.log(error.response.data.message)
             }
+            alert(error.response.data.message)
                 
         }
     } else {

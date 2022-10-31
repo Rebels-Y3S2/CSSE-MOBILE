@@ -38,5 +38,64 @@ export default styles = StyleSheet.create({
   },
   animation: {
     slideFrom: 'bottom'
-  }
+  },
+  itemContainer: {
+    padding: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    borderColor: '#002951',
+    marginBottom: 10,
+    marginTop: 10
+  },
+  itemName: {
+      fontSize: 15,
+      marginBottom: 5,
+      fontWeight: '600'
+  },
+  itemDetails: {
+      fontWeight: '600',
+      fontSize: 12,
+      marginBottom: 5,
+      color: '#757575'
+  },
+  qty_container: {
+    backgroundColor: 'white',
+    padding: 16,
+    width: '60%',
+    marginTop: -20
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8
+  },
+  icon: {
+    marginRight: 5
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14
+  },
+  placeholderStyle: {
+    fontSize: 16
+  },
+  selectedTextStyle: {
+    fontSize: 16
+  },
+  iconStyle: {
+    width: 20,
+    height: 20
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16
+  },
 })
