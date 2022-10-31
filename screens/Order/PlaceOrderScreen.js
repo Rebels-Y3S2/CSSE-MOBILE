@@ -89,19 +89,19 @@ export default function PlaceOrderScreen () {
       orderItems: formData,
       totalAmount: tt,
       orderStatus: tt >= 100000? 1 : 0,
-      referenceNo: 'ORD' + shortid.generate(),
+      referenceNo: 'ORD_REF' + shortid.generate(),
     }
     addOrder(orderObj).then((res) => {
       if (res?.data?.isSuccessful) {
-        toast.show('Order Created Successfully!', { type: 'success', placement: 'bottom', duration: 4000, animationType: 'zoom-in', topOffset: 30,bottomOffset: 40 })
-        setFormData([]);
+        alert(res?.data?.message)
         setList([]);
       } else {
-        toast.show('Error on creating the order!', { type: 'warning', placement: 'bottom', duration: 4000, animationType: 'zoom-in', topOffset: 30, bottomOffset: 40 })
+        alert(res?.data?.message)
       }
     })
       .catch((e) => {
         console.log(e)
+        alert(e)
       })
   }
 
@@ -224,10 +224,10 @@ export default function PlaceOrderScreen () {
                   <ListItem key={i} bottomDivider>
                     <Avatar source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6052/6052663.png' }} />
                     <ListItem.Content>
-                      <ListItem.Title style={styles.cardName}>{l.itemName}</ListItem.Title>
-                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>{UNIT_PRICE} &nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l.unitPrice}/-</ListItem.Subtitle>
-                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>{QTY} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> {l.quantity}</ListItem.Subtitle>
-                      <ListItem.Subtitle><Text style={styles.cardSubtitle}>Total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{(Number(l.unitPrice) * Number(l.quantity))}/-</ListItem.Subtitle>
+                      <ListItem.Title style={styles.itemDetails}>{l.itemName}</ListItem.Title>
+                      <ListItem.Subtitle><Text style={styles.itemDetails}>{UNIT_PRICE} &nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l.unitPrice}/-</ListItem.Subtitle>
+                      <ListItem.Subtitle><Text style={styles.itemDetails}>{QTY} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> {l.quantity}</ListItem.Subtitle>
+                      <ListItem.Subtitle><Text style={styles.itemDetails}>Total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{(Number(l.unitPrice) * Number(l.quantity))}/-</ListItem.Subtitle>
                     </ListItem.Content>
                   </ListItem>
                 ))

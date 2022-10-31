@@ -59,6 +59,13 @@ export default styles = StyleSheet.create({
       marginBottom: 5,
       color: '#757575'
   },
+  itemDetailsStatus: {
+      fontWeight: '600',
+      fontSize: 12,
+      marginBottom: 5,
+      color: '#757575',
+      marginTop: -10
+  },
   qty_container: {
     backgroundColor: 'white',
     padding: 16,

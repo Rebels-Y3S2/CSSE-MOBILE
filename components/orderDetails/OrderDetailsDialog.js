@@ -10,7 +10,7 @@ import { Card, ListItem, Avatar } from '@rneui/themed'
 import { Status } from '../../utils/status.js';
 import OrderEditScreen from '../itemView/OrderEditScreen.js';
 
-export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart, selectedItem, selectedOderData }) {
+export default function OrderDetailsDialog({ visible, setDialogOpen, onDelete, selectedItem, selectedOderData }) {
   const [amount, setAmount] = useState(1)
   const [modifiedMappedData, setModifiedMappedData] = useState([])
   
@@ -44,7 +44,7 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart
           />
           <DialogButton
             text={<Text style={styles.title}>{constants.DELETE_BUTTON_TEXT}</Text>}
-            onPress={() => onAddToCart(amount)}
+            onPress={() => onDelete(amount)}
           />
         </DialogFooter>
       }
@@ -55,18 +55,21 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart
             <Text style={styles.itemDetails}>
               Ref No. - {selectedItem?.referenceNo}
             </Text>
-            <Text style={styles.itemDetails}>
+            <Text style={styles.itemDetailsStatus}>
               Status - {Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText? Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText : "-"}
-              </Text>
-              <Text style={styles.itemDetails}>
-                Ordered Date - {moment(selectedItem?.createdAt).format('lll')}
-              </Text>
-              <Text style={styles.itemDetails}>
-                Total Amount - {getPriceInRupees(selectedItem?.totalAmount)}
-              </Text>
+              <Text style={{fontSize: 25, color: Status.find(({value}) => 
+                    value === selectedItem?.orderStatus)?.color
+                , textAlign: 'right'}}>&#8226;</Text>
+            </Text>
+            <Text style={styles.itemDetails}>
+              Ordered At - {moment(selectedItem?.createdAt).format('lll')}
+            </Text>
+            <Text style={styles.itemDetails}>
+              Total Amount - {getPriceInRupees(selectedItem?.totalAmount)}
+            </Text>
           </View>
           <View>
-            <OrderEditScreen orderData={selectedItem} modifiedMappedOrderData={modifiedMappedData}/>
+            <OrderEditScreen orderData={selectedItem} modifiedMappedOrderData={modifiedMappedData} setDialogOpen={setDialogOpen}/>
           </View>
         </ScrollView>
       </DialogContent>

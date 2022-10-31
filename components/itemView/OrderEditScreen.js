@@ -12,18 +12,10 @@ import { qty } from '../../utils/qty';
 import * as constants from '../../utils/constants.js';
 import { getItems } from '../../api/itemsApi'
 import { getUserId } from '../../utils/constants'
-import { Divider } from "@react-native-material/core";
+import { Divider, Switch } from "@react-native-material/core";
 
 export default function OrderEditScreen (props) {
-  const {orderData, modifiedMappedOrderData} = props;
-  const selectedItemD = {
-    agreedPrice: orderData.orderItems.agreedPrice,
-    item: orderData.orderItems.item,
-    itemName: orderData.orderItems.itemName,
-    quantity: orderData.orderItems.quantity,
-    stock: orderData.orderItems.stock,
-    unitPrice: orderData.orderItems.unitPrice,
-  }
+  const {orderData, modifiedMappedOrderData, setDialogOpen} = props;
 // console.log(modifiedMappedOrderData)
   const toast = useToast()
   const [items, setItems] = useState([])
@@ -38,7 +30,10 @@ export default function OrderEditScreen (props) {
   const [isFocusQty, setIsFocusQty] = useState(false)
 
   const [itemFormData, setItemFormData] = useState([])
-  const [formData, setFormData] = useState([])
+  const [formData, setFormData] = useState(modifiedMappedOrderData)
+
+  const [checked, setChecked] = useState(orderData.orderStatus === 6? true : false);
+  const [toggled, setToggled] = useState(false);
 
   useEffect(() => {
     getItems().then((data) => {
@@ -49,16 +44,12 @@ export default function OrderEditScreen (props) {
     })
   }, [])
 
-  // useEffect(() => {
-  //   setFormData(modifiedMappedOrderData? [...modifiedMappedOrderData, ...formData] : formData);
-  // }, [formData])
-
   const handleAdd = () => {
     const items = list
     const data = formData
     const totalPrice = { agreedPrice: Number(selectedQtyData.quantity) * Number(selectedItemData.unitPrice) }
     setList([...items, { ...selectedItemData, ...selectedQtyData, ...totalPrice }])
-    setFormData([...data, ...modifiedMappedOrderData, { ...itemFormData, ...selectedQtyData, ...totalPrice }])
+    setFormData([...data, { ...itemFormData, ...selectedQtyData, ...totalPrice }])
     // console.log(list)
     setSelectedItem()
     setSelectedQty()
@@ -80,7 +71,7 @@ export default function OrderEditScreen (props) {
     if (selectedItem || isFocus) {
       return (
           <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-            Select Item to order
+            {/* Select Item to order */}
           </Text>
       )
     }
@@ -88,7 +79,7 @@ export default function OrderEditScreen (props) {
   }
 
   const handleSubmit =  (orderObj) => {
-    const total = formData?.map((d) => d.agreedPrice)
+    const total = formData?.map((d) => Number(d.agreedPrice))
     const tt = total?.reduce((a, v) => a = a + v, 0)
     orderObj = {
       orderItems: formData,
@@ -97,21 +88,24 @@ export default function OrderEditScreen (props) {
     }
     editOrder(orderData._id, orderObj).then((res) => {
       if (res?.data?.isSuccessful) {
-        alert("Success")
+        alert(res?.data?.message)
+        setDialogOpen(false)
       } else {
-        alert("Error")
+        alert(res?.data?.message)
+        setDialogOpen(false)
       }
     })
-      .catch((e) => {
-        console.log(e)
-      })
+    .catch((e) => {
+      console.log(e)
+      alert(e)
+    })
   }
 
   const renderQtyLabel = () => {
     if (selectedQty || isFocusQty) {
       return (
           <Text style={[styles.label, isFocusQty && { color: 'blue' }]}>
-            {constants.SELECT_QUANTITY}
+            {/* {constants.SELECT_QUANTITY} */}
           </Text>
       )
     }
@@ -119,15 +113,36 @@ export default function OrderEditScreen (props) {
   }
 
   const totalAgreed = () => {
-    const total = formData?.map((d) => d.agreedPrice)
+    const total = formData?.map((d) => Number(d.agreedPrice))
     return (
       <Text style={styles.cardSubtitle}>Total Price : Rs.{total?.reduce((a, v) => a = a + v, 0)}/-</Text>
     )
   }
 
+  useEffect(() => {
+    const orderObj = {
+      orderStatus: checked? 6 : 7,
+    }
+    if (toggled) {
+      editOrder(orderData._id, orderObj).then((res) => {
+        if (res?.data?.isSuccessful) {
+          alert("Delivery status updated!")
+        } else {
+          alert(res?.data?.message)
+        }
+        setToggled(false);
+      })
+      .catch((e) => {
+        console.log(e)
+        alert(e)
+      })
+    }
+  }, [toggled, !toggled]);
+  
   return (
       <ScrollView>
         <View>
+        <Divider />
           <View>
             <Card style={styles.orderNowCard}>
               <Card.Title>{constants.ORDER_NOW}</Card.Title>
@@ -223,7 +238,7 @@ export default function OrderEditScreen (props) {
                   <ListItem key={i} bottomDivider>
                     <Avatar source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6052/6052663.png' }} />
                     <ListItem.Content>
-                      <ListItem.Title style={styles.itemDetails}>{l.item.itemName? l.item.itemName : l?.itemName}</ListItem.Title>
+                      <ListItem.Title style={styles.itemDetails}>{l.item?.itemName? l.item?.itemName : l?.itemName}</ListItem.Title>
                       <ListItem.Subtitle><Text style={styles.itemDetails}>{constants.UNIT_PRICE} &nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l.unitPrice? l.unitPrice : (l.agreedPrice / l.quantity)}/-</ListItem.Subtitle>
                       <ListItem.Subtitle><Text style={styles.itemDetails}>{constants.QTY} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> {l?.quantity}</ListItem.Subtitle>
                       <ListItem.Subtitle><Text style={styles.itemDetails}>Total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-</Text> Rs.{l?.agreedPrice}/-</ListItem.Subtitle>
@@ -250,6 +265,14 @@ export default function OrderEditScreen (props) {
               title={"Save Order"}
             />
           </Card>
+        </View>
+        <View>
+        <Divider style={{marginTop: 20}}/>
+        <Text style={styles.itemName}>Delivered</Text>
+        <HStack spacing={20}>
+          <Switch value={checked} onValueChange={() => {setChecked(!checked); setToggled(true);}} />
+          <Text>{checked? 'Yes' : 'No'}</Text>
+        </HStack>
         </View>
         </ScrollView>
   )

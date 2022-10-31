@@ -24,6 +24,7 @@
     "react-native": "0.69.6",
     "react-native-avatar-generator": "^1.0.2",
     "react-native-element-dropdown": "^2.3.0",
+    "react-native-html-to-pdf": "^0.12.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-paper": "^4.12.5",
     "react-native-popup-dialog": "^0.18.3",

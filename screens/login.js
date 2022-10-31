@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { loginUser } from '../api/userApi';
-import { Eye, EyeActive } from '../assets';
-
+import { Eye, EyeActive, Logo } from '../assets';
+import { Divider } from "@react-native-material/core";
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
@@ -96,45 +96,54 @@ export default function Login({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapperInput}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={text => handleCheckEmail(text)}
-        />
+      <View style={styles.subContainer}>
+        <View style={{marginBottom: 20, margin: 20}}>
+          <Image source={Logo}  />
+        </View>
+        <Divider color="gray" style={{marginBottom: 20}}/>
+        <View style={styles.wrapperInput}>
+          <Text style={styles.inputLabel}>Email :</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={text => handleCheckEmail(text)}
+          />
+        </View>
+        {checkValidEmail ? (
+          <Text style={styles.textFailed}>Wrong format email</Text>
+        ) : (
+          <Text style={styles.textFailed}> </Text>
+        )}
+        <View style={styles.wrapperInput}>
+          <Text style={styles.inputLabel}>Password :</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            secureTextEntry={seePassword}
+            onChangeText={text => setPassword(text)}
+          />
+          <TouchableOpacity
+            style={styles.wrapperIcon}
+            onPress={() => setSeePassword(!seePassword)}>
+            <Image source={seePassword ? Eye : EyeActive} style={styles.icon} color='white'/>
+          </TouchableOpacity>
+        </View>
+        <Divider color="gray" style={{marginBottom: 20, marginTop: 20}}/>
+        {email == '' || password == '' || checkValidEmail == true ? (
+          <TouchableOpacity
+            disabled
+            style={styles.buttonDisable}
+            onPress={handleLogin}>
+            <Text style={styles.text}>Login</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.text}>Login</Text>
+          </TouchableOpacity>
+        )}
       </View>
-      {checkValidEmail ? (
-        <Text style={styles.textFailed}>Wrong format email</Text>
-      ) : (
-        <Text style={styles.textFailed}> </Text>
-      )}
-      <View style={styles.wrapperInput}>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          secureTextEntry={seePassword}
-          onChangeText={text => setPassword(text)}
-        />
-        <TouchableOpacity
-          style={styles.wrapperIcon}
-          onPress={() => setSeePassword(!seePassword)}>
-          <Image source={seePassword ? Eye : EyeActive} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-      {email == '' || password == '' || checkValidEmail == true ? (
-        <TouchableOpacity
-          disabled
-          style={styles.buttonDisable}
-          onPress={handleLogin}>
-          <Text style={styles.text}>Login</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.text}>Login</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 }
@@ -142,7 +151,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginHorizontal: 20,
+    backgroundColor: '#002951',
+  },
+  subContainer: {
+    padding: 20
   },
   wrapperInput: {
     borderWidth: 0.5,
@@ -151,25 +163,34 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    color: 'white'
   },
   input: {
     padding: 10,
     width: '100%',
+    color: 'white'
   },
+  inputLabel: {
+    color: 'white',
+    marginLeft: 20,
+    marginTop: 1
+  },  
   wrapperIcon: {
     position: 'absolute',
     right: 0,
     padding: 10,
+    color: 'white'
   },
   icon: {
     width: 30,
     height: 24,
+    color: 'white'
   },
   button: {
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'orange',
+    backgroundColor: 'white',
     borderRadius: 5,
     marginTop: 25,
   },
@@ -182,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   text: {
-    color: 'white',
+    color: 'black',
     fontWeight: '700',
   },
   textFailed: {

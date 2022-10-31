@@ -12,13 +12,21 @@ export default styles = StyleSheet.create({
         fontSize: 15,
         marginBottom: 5,
         fontWeight: '600',
-        marginTop: 20
+        marginTop: 20,
+        color: 'red'
     },
     itemDetails: {
         fontWeight: '600',
         fontSize: 12,
         marginBottom: 5,
         color: '#757575'
+    },
+    itemDetailsStatus: {
+      fontWeight: '600',
+      fontSize: 12,
+      marginBottom: 5,
+      color: '#757575',
+      marginTop: -5
     },
     qty_container: {
         backgroundColor: 'white',

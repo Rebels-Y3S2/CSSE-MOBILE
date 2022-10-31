@@ -21,7 +21,7 @@ export default function OrderList ({navigation}) {
     getOrders().then((data) => {
       setOrders(data?.data?.responseData)
     })
-  }, [])
+  }, [orders])
 
   useEffect(() => {
     if(selectedItem) {
@@ -32,7 +32,7 @@ export default function OrderList ({navigation}) {
     }
   }, [selectedItem])
 
-  function handleAddtoCart() {
+  function handleRemoveOrder() {
       if(selectedItem) {
         removeorder(selectedItem?._id).then((data) => {
           // setSelectedOrderData(data.request._response);
@@ -62,7 +62,7 @@ export default function OrderList ({navigation}) {
               visible={dialogOpen}
               title={selectedItem?.name}
               selectedItem={selectedItem}
-              onAddToCart={handleAddtoCart}
+              onDelete={handleRemoveOrder}
               setDialogOpen={setDialogOpen}
               selectedOderData={JSON.stringify(selectedOderData)}
           />
