@@ -1,21 +1,36 @@
 import { Button } from '@react-native-material/core';
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import Dialog, { SlideAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog';
 import { getPriceInRupees } from '../../utils/common.js';
 import * as constants from '../../utils/constants.js';
 import styles from './styles';
 import moment from 'moment'
 import { Card, ListItem, Avatar } from '@rneui/themed'
+import { Status } from '../../utils/status.js';
+import OrderEditScreen from '../itemView/OrderEditScreen.js';
 
-export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart, selectedItem }) {
+export default function OrderDetailsDialog({ visible, setDialogOpen, onDelete, selectedItem, handleGetOrders, dialogOpen, setSelectedItem }) {
   const [amount, setAmount] = useState(1)
+  // const [modifiedMappedData, setModifiedMappedData] = useState([])
   
   useEffect(() => {
     setAmount(1);
   }, [visible]);
+  
+  // useEffect(() => {
+  //   setModifiedMappedData(selectedItem?.orderItems.map((d) => {
+  //     return {
+  //       agreedPrice: d?.agreedPrice,
+  //       item: d?.item?._id,
+  //       quantity: d?.quantity,
+  //       supplierDetails: d?.supplierDetails,
+  //     }
+  //   }))
+  // }, [visible])
 
   return (
+    <View>
     <Dialog
       visible={visible}
       dialogTitle={<DialogTitle style={styles.container} title={<Text style={styles.title}>{constants.ORDER_DETAILS}</Text>} />}
@@ -24,44 +39,47 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onAddToCart
         <DialogFooter style={styles.footer_container}>
           <DialogButton
             text={<Text style={styles.title}>{constants.CLOSE}</Text>}
-            onPress={() => setDialogOpen(false)}
+            onPress={() => {setDialogOpen(false); handleGetOrders();} }
           />
           <DialogButton
             text={<Text style={styles.title}>{constants.DELETE_BUTTON_TEXT}</Text>}
-            onPress={() => onAddToCart(amount)}
+            onPress={() => onDelete(amount)}
           />
         </DialogFooter>
       }
     >
       <DialogContent style={styles.dialogCont}>
-        <View>
-          <Card>
-            <Card.Title>Ref No.</Card.Title>
-            <Card.Divider />
-            <Text>{selectedItem?.referenceNo}</Text>
-          </Card>
-          <Card>
-            <Card.Title>Status.</Card.Title>
-            <Card.Divider />
-            <Text>{selectedItem?.isAccepted === 0? constants.NOT_ACCEPTED : constants.ACCEPTED}
-            {selectedItem?.isAccepted === 0?
-                    <Text style={{fontSize: 35, color: 'red', textAlign: 'right'}}>&#8226;</Text> :
-                    <Text style={{fontSize: 35, color: '#3fc18c', textAlign: 'right'}}>&#8226;</Text>
-                }
+        <ScrollView style={{height: 600}}>
+          <View style={styles.itemContainer}>
+            <Text style={styles.itemDetails}>
+              Ref No. - {selectedItem?.referenceNo}
             </Text>
-          </Card>
-          <Card>
-            <Card.Title>Total Amount</Card.Title>
-            <Card.Divider />
-            <Text>{getPriceInRupees(selectedItem?.totalAmount)}</Text>
-          </Card>
-          <Card>
-            <Card.Title>Ordered Date & Time</Card.Title>
-            <Card.Divider />
-            <Text>{moment(selectedItem?.createdAt).format('lll')}</Text>
-          </Card>
-        </View>
+            <Text style={styles.itemDetailsStatus}>
+              Status - {Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText? Status.find(({value}) => value === selectedItem?.orderStatus)?.displayText : "-"}
+              <Text style={{fontSize: 25, color: Status.find(({value}) => 
+                    value === selectedItem?.orderStatus)?.color
+                , textAlign: 'right'}}>&#8226;</Text>
+            </Text>
+            <Text style={styles.itemDetails}>
+              Ordered At - {moment(selectedItem?.createdAt).format('lll')}
+            </Text>
+            <Text style={styles.itemDetails}>
+              Total Amount - {getPriceInRupees(selectedItem?.totalAmount)}
+            </Text>
+          </View>
+          <View>
+            <OrderEditScreen
+              orderData={selectedItem}
+              // modifiedMappedOrderData={modifiedMappedData}
+              setDialogOpen={setDialogOpen}
+              dialogOpen={dialogOpen}
+              // setModifiedMappedData={setModifiedMappedData}
+              handleGetOrders={handleGetOrders}
+            />
+          </View>
+        </ScrollView>
       </DialogContent>
     </Dialog>
+    </View>
   )
 }

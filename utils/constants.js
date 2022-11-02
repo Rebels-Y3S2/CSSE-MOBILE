@@ -6,6 +6,8 @@ export const PLUS_BUTTON = '    -    ';
 export const MINUS_BUTTON = '    +    ';
 
 export const DELETE_BUTTON_TEXT = 'Remove Order';
+export const EDIT = 'Save Order';
+export const DELIVERED = 'Delivered';
 
 export const ADD_BUTTON = '    +    ';
 export const REMOVE_BUTTON = '    -    ';
@@ -13,7 +15,7 @@ export const REMOVE_BUTTON = '    -    ';
 const PROCUMENT_USER_ID = '634ea905f0c2bea76c657643';
 const SUPPLIER_USER_ID = '634ea905f0c2bea76c657643';
 const ADMIN_USER_ID = '634ea905f0c2bea76c657643';
-const SITE_MANAGER_USER_ID = '634ea905f0c2bea76c657643';
+const SITE_MANAGER_USER_ID = '635ecb8e4f31111a927db2ce';
 
 export const PROCUMENT_USER = 'PROCUMENT';
 export const SITE_MANAGER = 'SITE_MANAGER';

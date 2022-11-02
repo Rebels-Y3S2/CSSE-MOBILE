@@ -69,5 +69,25 @@ export default styles = StyleSheet.create({
     border: '1px solid #002951'
   },
   placeOrdBtn: {
-  }
+  },
+  itemContainer: {
+    padding: 5,
+    borderWidth: 0.2,
+    borderRadius: 2,
+    marginHorizontal: 10,
+    borderColor: '#656565'
+  },
+  itemName: {
+      fontSize: 15,
+      marginBottom: 5,
+      fontWeight: '600',
+      marginTop: 20,
+      color: 'red'
+  },
+  itemDetails: {
+      fontWeight: '600',
+      fontSize: 12,
+      marginBottom: 5,
+      color: '#757575'
+  },
 })

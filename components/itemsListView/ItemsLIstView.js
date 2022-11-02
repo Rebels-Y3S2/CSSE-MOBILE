@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { FlatList, TouchableOpacity, View, StyleSheet, Text } from 'react-native'
 import ItemView from '../itemView/ItemView'
 
 export default function ItemsListView ({ items, onItemPress, orders }) {
