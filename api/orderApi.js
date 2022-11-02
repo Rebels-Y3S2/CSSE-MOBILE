@@ -3,7 +3,18 @@ import { BASE_URL } from '../utils/constants'
 
 export const addOrder = (payload) => {
   return axios
-    .post(BASE_URL + '/orders/addToCart', payload)
+    .post(BASE_URL + '/orders', payload)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      return error
+    })
+}
+
+export const editOrder = (id, payload) => {
+  return axios
+    .put(BASE_URL + `/orders/${id}`, payload)
     .then((response) => {
       return response
     })
