@@ -8,15 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { loginUser } from '../api/userApi';
+import UserService from '../api/userApi';
 import { Eye, EyeActive, Logo } from '../assets';
 import { Divider } from "@react-native-material/core";
+import apiInstance from '../api/apiInstance';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [seePassword, setSeePassword] = useState(true);
   const [checkValidEmail, setCheckValidEmail] = useState(false);
+
+  const userService = UserService.getUserService(apiInstance);
 
   const handleCheckEmail = text => {
     let re = /\S+@\S+\.\S+/;
@@ -56,12 +59,6 @@ export default function Login({navigation}) {
       return 'Password must be 8-16 Characters Long.';
     }
 
-    // const isContainsSymbol =
-    //   /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
-    // if (!isContainsSymbol.test(value)) {
-    //   return 'Password must contain at least one Special Symbol.';
-    // }
-
     return null;
   };
 
@@ -73,7 +70,7 @@ export default function Login({navigation}) {
     }
     if (!checkPassowrd) {
         try {
-            const userLog = loginUser(userObj);
+            const userLog = userService.loginUser(userObj);
             const { data: res } = await userLog;
             AsyncStorage.setItem('AccessToken', res?.responseData);
             if(res.isSuccessful) {
@@ -86,8 +83,7 @@ export default function Login({navigation}) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 console.log(error.response.data.message)
             }
-            alert(error.response.data.message)
-                
+            alert(error.response.data.message) 
         }
     } else {
         alert(checkPassowrd);
