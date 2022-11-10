@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import { getItems } from '../../api/itemsApi'
 import {
   getUserId,
   ORDER_NOW,
@@ -20,9 +19,11 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { qty } from '../../utils/qty'
 import { Card, ListItem, Avatar } from '@rneui/themed'
 import styles from './styles'
-import { addOrder } from '../../api/orderApi'
 import { useToast } from 'react-native-toast-notifications'
 import shortid from 'shortid';
+import apiInstance from '../../api/apiInstance';
+import OrderService from '../../api/orderApi';
+import ItemService from '../../api/itemsApi';
 
 export default function PlaceOrderScreen () {
   const toast = useToast()
@@ -40,8 +41,11 @@ export default function PlaceOrderScreen () {
   const [itemFormData, setItemFormData] = useState([])
   const [formData, setFormData] = useState([])
 
+  const orderService = OrderService.getOrderService(apiInstance);
+  const itemService = ItemService.getItemService(apiInstance);
+
   useEffect(() => {
-    getItems().then((data) => {
+    itemService.getItems().then((data) => {
       setItems(data.data?.responseData)
     })
     .catch((e) => {
@@ -91,7 +95,7 @@ export default function PlaceOrderScreen () {
       orderStatus: tt >= 100000? 1 : 0,
       referenceNo: 'ORD_REF' + shortid.generate(),
     }
-    addOrder(orderObj).then((res) => {
+    orderService.addOrder(orderObj).then((res) => {
       if (res?.data?.isSuccessful) {
         alert(res?.data?.message)
         setList([]);
