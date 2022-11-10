@@ -5,14 +5,15 @@ import { HStack, VStack, Button } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { Card, ListItem, Avatar } from '@rneui/themed'
 import styles from './styles'
-import { addOrder, editOrder } from '../../api/orderApi'
 import { useToast } from 'react-native-toast-notifications'
 import shortid from 'shortid';
 import { qty } from '../../utils/qty';
 import * as constants from '../../utils/constants.js';
-import { getItems } from '../../api/itemsApi'
 import { getUserId } from '../../utils/constants'
 import { Divider, Switch } from "@react-native-material/core";
+import apiInstance from '../../api/apiInstance'
+import OrderService from '../../api/orderApi'
+import ItemService from '../../api/itemsApi'
 
 export default function OrderEditScreen (props) {
   const {orderData, modifiedMappedOrderData, setDialogOpen, dialogOpen, handleGetOrders, setModifiedMappedData} = props;
@@ -45,12 +46,11 @@ export default function OrderEditScreen (props) {
   const [toggled, setToggled] = useState(false);
   const [total, setTotal] = useState(0);
 
-  // useEffect(() => {
-  //   setFormData(modifiedMappedOrderData)
-  // });
-  
+  const orderService = OrderService.getOrderService(apiInstance);
+  const itemService = ItemService.getItemService(apiInstance);
+
   useEffect(() => {
-    getItems().then((data) => {
+    itemService.getItems().then((data) => {
       setItems(data.data?.responseData)
     })
     .catch((e) => {
@@ -105,7 +105,7 @@ export default function OrderEditScreen (props) {
       totalAmount: total,
       orderStatus: total >= 100000 ? 1 : 0,
     }
-    editOrder(orderData._id, orderObj).then((res) => {
+    orderService.editOrder(orderData._id, orderObj).then((res) => {
       if (res?.data?.isSuccessful) {
         alert(res?.data?.message)
       } else {
@@ -147,7 +147,7 @@ export default function OrderEditScreen (props) {
       orderStatus: checked? 6 : 7,
     }
     if (toggled) {
-      editOrder(orderData._id, orderObj).then((res) => {
+      orderService.editOrder(orderData._id, orderObj).then((res) => {
         if (res?.data?.isSuccessful) {
           alert("Delivery status updated!")
         } else {
