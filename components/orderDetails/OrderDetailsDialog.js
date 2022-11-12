@@ -17,17 +17,6 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onDelete, s
   useEffect(() => {
     setAmount(1);
   }, [visible]);
-  
-  // useEffect(() => {
-  //   setModifiedMappedData(selectedItem?.orderItems.map((d) => {
-  //     return {
-  //       agreedPrice: d?.agreedPrice,
-  //       item: d?.item?._id,
-  //       quantity: d?.quantity,
-  //       supplierDetails: d?.supplierDetails,
-  //     }
-  //   }))
-  // }, [visible])
 
   return (
     <View>
@@ -70,10 +59,8 @@ export default function OrderDetailsDialog({ visible, setDialogOpen, onDelete, s
           <View>
             <OrderEditScreen
               orderData={selectedItem}
-              // modifiedMappedOrderData={modifiedMappedData}
               setDialogOpen={setDialogOpen}
               dialogOpen={dialogOpen}
-              // setModifiedMappedData={setModifiedMappedData}
               handleGetOrders={handleGetOrders}
             />
           </View>

@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
     color: "white",
   },
   footer_container: {
-    padding: 5,
+    padding: 0,
     backgroundColor: "#002951",
     height: 60,
     color: "white"
